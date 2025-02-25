@@ -13,8 +13,8 @@ export default class Estimator {
         await this.commonActions.navigate(url);
     }
 
-    async scroll_to_contact(page){
-        await page.getByRole('link', { name: 'Contact Us' }).click();
+    async scroll_to_contact(){
+        await this.page.getByRole('link', { name: 'Contact Us' }).click();
     }
 
     async skip(){
