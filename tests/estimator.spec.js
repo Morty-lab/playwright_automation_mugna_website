@@ -52,13 +52,37 @@ test.describe("Estimator", () => {
   test('Verify that the "Next" button is disabled if there are no staff added and is only enabled when at least one staff in any role has been added', async ({
     page,
   }) => {
-    // Test implementation goes here
+    const estimator = new Estimator(page);
+
+    //test if Next button is disabled
+    await page.getByText("Next").click();
+    await expect(page.getByText("Select Number of StaffsSS").first()).toBeVisible();
+
+    //test if Next button is enabled
+    for (const { team, months } of projects) {
+      for (const [key, details] of Object.entries(team)) {
+        await estimator.add_staff("increment", key, details.quantity);
+      }
+
+      //Go to staff details page
+      await page.getByText("Next").click();
+      await expect(page.getByText("Staff Details").first()).toBeVisible();
+    }
   });
 
   test('Verify that when the "Next" Button is pressed it redirects to the Staff Details card', async ({
     page,
   }) => {
-    // Test implementation goes here
+    const estimator = new Estimator(page);
+    for (const { team, months } of projects) {
+      for (const [key, details] of Object.entries(team)) {
+        await estimator.add_staff("increment", key, details.quantity);
+      }
+
+      //Go to staff details page
+      await page.getByText("Next").click();
+      await expect(page.getByText("Staff Details").first()).toBeVisible();
+    }
   });
 
   test("Verify that the technology stack select can have no items or all items selected", async ({
