@@ -64,7 +64,29 @@ test.describe("Estimator", () => {
   test("Verify that the technology stack select can have no items or all items selected", async ({
     page,
   }) => {
-    // Test implementation goes here
+    const estimator = new Estimator(page);
+    for (const { team, months } of projects) {
+      for (const [key, details] of Object.entries(team)) {
+        await estimator.add_staff("increment", key, details.quantity);
+      }
+
+      //Go to staff details page
+      await page.getByText("Next").click();
+      await expect(page.getByText("Staff Details").first()).toBeVisible();
+
+      //skip to next page
+      await estimator.skip();
+      await expect(
+        page.getByText("Just a few things left.").first()
+      ).toBeVisible();
+
+      //go back to staff details
+      await page.getByText("Back").click();
+
+      // select all items
+      // await page.pause();
+      await estimator.select_technology_stack(team);
+    }
   });
 
   test("Verify that the email and months field are required in submitting the estimator", async ({
